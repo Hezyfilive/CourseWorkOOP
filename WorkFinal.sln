@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkFinal", "WorkFinal\WorkFinal.csproj", "{D5B1916B-059D-47F5-BF97-2574262C9E39}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Polynom", "Polynom\Polynom.csproj", "{03F4CF58-0A08-4F1C-B677-3347BDAE112E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Polynomial", "Polynomial\Polynomial.csproj", "{03F4CF58-0A08-4F1C-B677-3347BDAE112E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkFinalConsole", "WorkFinalConsole\WorkFinalConsole.csproj", "{65870912-D91C-4084-A047-9E292206D7D2}"
 EndProject
