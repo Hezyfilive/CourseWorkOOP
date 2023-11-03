@@ -51,9 +51,7 @@ public partial class MainWindow
         var degreeText = DegreeSelect.Text;
         if (int.TryParse(degreeText, out var degree))
         {
-            var interpolation = _dataGrid.GetPolynomialInterpolation();
-            
-            var result = interpolation.FindRoots(degree, 1e-6, 100);
+            var result = GetResult(degree);
             var graphWindow = new GraphWindow(result);
         }
         else
@@ -94,8 +92,7 @@ public partial class MainWindow
             var degreeText = DegreeSelect.Text;
             if (int.TryParse(degreeText, out var degree))
             {
-                var interpolation = _dataGrid.GetPolynomialInterpolation();
-                var result = interpolation.FindRoots(degree, 1e-6, 100);
+                var result = GetResult(degree);
                 var documentResult = new DocumentResult();
                 documentResult.DocResult(result, filePath, degree);
             }
@@ -119,8 +116,7 @@ public partial class MainWindow
             var degreeText = DegreeSelect.Text;
             if (int.TryParse(degreeText, out var degree))
             {
-                var interpolation = _dataGrid.GetPolynomialInterpolation();
-                var result = interpolation.FindRoots(degree, 1e-6, 100);
+                var result = GetResult(degree);
                 var docxResult = new DocxResult();
                 docxResult.DocResult(result, filePath, degree);
             }
@@ -173,5 +169,11 @@ public partial class MainWindow
         var dataPoints = interpolation.DataPoints;
         ObservableCollection<DataPoint> collection = new(dataPoints);
         DataPointGrid.ItemsSource = collection;
+    }
+
+    private List<double> GetResult(int degree)
+    {
+        var interpolation = _dataGrid.GetPolynomialInterpolation();
+        return interpolation.FindRoots(degree, 1e-6, 100);
     }
 }
