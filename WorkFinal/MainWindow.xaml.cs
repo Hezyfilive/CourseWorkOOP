@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows;
 using Microsoft.Win32;
+using NPOI.SS.Formula.Functions;
 using Polynom;
 
 namespace WorkFinal;
@@ -47,14 +48,13 @@ public partial class MainWindow
 
     private void CalculateResult_Click(object sender, RoutedEventArgs e)
     {
-        var input = TxtSearch.Text;
-        if (double.TryParse(input, out var inputDouble))
+        var degreeText = DegreeSelect.Text;
+        if (int.TryParse(degreeText, out var degree))
         {
             var interpolation = _dataGrid.GetPolynomialInterpolation();
-            var result = interpolation.LagrangeInterpolation(inputDouble);
-            ResultText.Visibility = Visibility.Visible;
-            Result.Text = result.ToString();
-            Result.Visibility = Visibility.Visible;
+            
+            var result = interpolation.FindRoots(degree, 1e-6, 100);
+            var graphWindow = new GraphWindow(result);
         }
         else
         {
@@ -91,13 +91,13 @@ public partial class MainWindow
         {
             var filePath = saveFileDialog.FileName;
 
-            var input = TxtSearch.Text;
-            if (double.TryParse(input, out var inputDouble))
+            var degreeText = DegreeSelect.Text;
+            if (int.TryParse(degreeText, out var degree))
             {
                 var interpolation = _dataGrid.GetPolynomialInterpolation();
-                var result = interpolation.LagrangeInterpolation(inputDouble);
+                var result = interpolation.FindRoots(degree, 1e-6, 100);
                 var documentResult = new DocumentResult();
-                documentResult.DocResult(result, filePath);
+                documentResult.DocResult(result, filePath, degree);
             }
             else
             {
@@ -116,13 +116,13 @@ public partial class MainWindow
         {
             var filePath = saveFileDialog.FileName;
 
-            var input = TxtSearch.Text;
-            if (double.TryParse(input, out var inputDouble))
+            var degreeText = DegreeSelect.Text;
+            if (int.TryParse(degreeText, out var degree))
             {
                 var interpolation = _dataGrid.GetPolynomialInterpolation();
-                var result = interpolation.LagrangeInterpolation(inputDouble);
+                var result = interpolation.FindRoots(degree, 1e-6, 100);
                 var docxResult = new DocxResult();
-                docxResult.DocResult(result, filePath);
+                docxResult.DocResult(result, filePath, degree);
             }
             else
             {

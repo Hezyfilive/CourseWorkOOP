@@ -161,15 +161,22 @@
                         <TextBlock Text="Show chart" />
                     </StackPanel>
                 </Button>
-                <Grid Row="3">
+                <Grid Row="3" Visibility="Hidden">
                     <TextBlock Margin="10 0" Width="250" VerticalAlignment="Center" HorizontalAlignment="Left"
                                Foreground="#b0b9c6" IsHitTestVisible="False"
-                               Panel.ZIndex="1" Text="Enter x here ..."
+                               Panel.ZIndex="1" Text="Enter eps here ..."
                                Visibility="{Binding ElementName=TxtSearch, Path=Text.IsEmpty, Converter={StaticResource  BoolToVis}}" />
                     <TextBox x:Name="TxtSearch" Style="{StaticResource TextBoxSearch}" />
                 </Grid>
+                <Grid Row="4">
+                    <TextBlock Margin="10 0" Width="250" VerticalAlignment="Center" HorizontalAlignment="Left"
+                               Foreground="#b0b9c6" IsHitTestVisible="False"
+                               Panel.ZIndex="1" Text="Enter degree here ..."
+                               Visibility="{Binding ElementName=DegreeSelect, Path=Text.IsEmpty, Converter={StaticResource  BoolToVis}}" />
+                    <TextBox x:Name="DegreeSelect" Style="{StaticResource TextBoxSearch}" />
+                </Grid>
 
-                <Button Grid.Row="4" Style="{StaticResource AddButton}" HorizontalAlignment="Center"
+                <Button Grid.Row="5" Style="{StaticResource AddButton}" HorizontalAlignment="Center"
                         Click="CalculateResult_Click">
                     <StackPanel Orientation="Horizontal">
                         <icon:PackIconMaterial Kind="CalculatorVariant" VerticalAlignment="Center" Width="11"
@@ -177,9 +184,9 @@
                         <TextBlock Text="Calculate" />
                     </StackPanel>
                 </Button>
-                <TextBlock Grid.Row="5" Text="Result" FontSize="16" Margin="20 10 0 0 "
+                <TextBlock Grid.Row="6" Text="Result" FontSize="16" Margin="20 10 0 0 "
                            HorizontalAlignment="Left" Foreground="#121518" x:Name="ResultText" Visibility="Hidden" />
-                <TextBlock Grid.Row="5" HorizontalAlignment="Center" Text="Result" x:Name="Result" FontSize="16"
+                <TextBlock Grid.Row="6" HorizontalAlignment="Center" Text="Result" x:Name="Result" FontSize="16"
                            Margin="20 10 0 0 " Foreground="#121518" Visibility="Hidden" />
             </Grid>
         </Grid>

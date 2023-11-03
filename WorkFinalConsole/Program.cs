@@ -22,8 +22,8 @@ abstract class Program
         Console.Write("Enter x value for Lagrange Interpolation: ");
         double xValue = double.Parse(Console.ReadLine());
 
-        double result = polynomialInterpolation.LagrangeInterpolation(xValue);
-        Console.WriteLine($"Lagrange Interpolation Result at x={xValue}: {result}");
+        double interpolation = polynomialInterpolation.LagrangeInterpolation(xValue);
+        Console.WriteLine($"Lagrange Interpolation Result at x={xValue}: {interpolation}");
         
         polynomialInterpolation.SaveToXml("test.xml");
         Console.WriteLine("Data points saved to test.xml.");
@@ -33,5 +33,23 @@ abstract class Program
         {
             Console.WriteLine($"X: {dataPoint.X}, Y: {dataPoint.Y}");
         }
+        
+        Console.WriteLine("Specify the degree n of the polynomial f(x):");
+        int degree = int.Parse(Console.ReadLine());
+        
+        Console.WriteLine("Enter the eps:");
+        double eps = Double.Parse(Console.ReadLine());
+
+        Console.WriteLine("Enter max iteration value:");
+        int maxIteration = int.Parse(Console.ReadLine());
+
+        List<double> results = polynomialInterpolation.FindRoots(degree, eps, maxIteration);
+        foreach (var result in results)
+        {
+            Console.WriteLine($"Root found within x: {result}");
+        }
+        
+
+
     }
 }
