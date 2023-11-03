@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net7.0-windows</TargetFramework>
+        <Nullable>enable</Nullable>
+        <UseWPF>true</UseWPF>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Polynom\Polynom.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="iTextSharp" Version="5.5.13.3"/>
+        <PackageReference Include="MahApps.Metro.IconPacks" Version="4.11.0"/>
+        <PackageReference Include="NPOI" Version="2.6.2"/>
+        <PackageReference Include="OxyPlot.Core" Version="2.1.2"/>
+        <PackageReference Include="OxyPlot.Wpf" Version="2.1.2"/>
+        <PackageReference Include="System.Drawing.Common" Version="8.0.0-rc.2.23479.14"/>
+    </ItemGroup>
+
+</Project>

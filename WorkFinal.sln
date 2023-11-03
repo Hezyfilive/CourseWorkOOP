@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkFinal", "WorkFinal\WorkFinal.csproj", "{D5B1916B-059D-47F5-BF97-2574262C9E39}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Polynom", "Polynom\Polynom.csproj", "{03F4CF58-0A08-4F1C-B677-3347BDAE112E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkFinalConsole", "WorkFinalConsole\WorkFinalConsole.csproj", "{65870912-D91C-4084-A047-9E292206D7D2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D5B1916B-059D-47F5-BF97-2574262C9E39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5B1916B-059D-47F5-BF97-2574262C9E39}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5B1916B-059D-47F5-BF97-2574262C9E39}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5B1916B-059D-47F5-BF97-2574262C9E39}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03F4CF58-0A08-4F1C-B677-3347BDAE112E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03F4CF58-0A08-4F1C-B677-3347BDAE112E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03F4CF58-0A08-4F1C-B677-3347BDAE112E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03F4CF58-0A08-4F1C-B677-3347BDAE112E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65870912-D91C-4084-A047-9E292206D7D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65870912-D91C-4084-A047-9E292206D7D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65870912-D91C-4084-A047-9E292206D7D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65870912-D91C-4084-A047-9E292206D7D2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

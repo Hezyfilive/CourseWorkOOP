@@ -1,0 +1,21 @@
+﻿<Window x:Class="WorkFinal.GraphWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:oxy="http://oxyplot.org/wpf"
+        xmlns:icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
+        mc:Ignorable="d"
+        Height="450" Width="800" WindowStartupLocation="CenterScreen" AllowsTransparency="True"
+        Background="Transparent" WindowStyle="None" Visibility="Visible">
+    <Border Background="#eff2f7" CornerRadius="30">
+        <Grid>
+            <Button Style="{StaticResource EditCloseWindow}" Click="CloseButton_Click"
+                    Width="25" Height="25" VerticalAlignment="Top">
+                <icon:PackIconMaterial Kind="Close" Style="{StaticResource gridButtonIcon}" />
+            </Button>
+            <oxy:PlotView x:Name="interpolationPlot" Width="400" Height="300" />
+
+        </Grid>
+    </Border>
+</Window>
