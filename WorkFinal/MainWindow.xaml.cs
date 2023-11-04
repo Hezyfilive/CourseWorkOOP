@@ -145,11 +145,11 @@ public partial class MainWindow
 
                     if (pdfResult)
                     {
-                        GenerateResultDoc(new DocumentResult(), result, filePath, degree);
+                        GenerateResultDoc(new DocumentResult(), result, filePath, degree, eps, iterations);
                     }
                     else
                     {
-                        GenerateResultDoc(new DocxResult(), result, filePath, degree);
+                        GenerateResultDoc(new DocxResult(), result, filePath, degree, eps, iterations);
                     }
                 }
             }
@@ -165,9 +165,9 @@ public partial class MainWindow
     }
 
 
-    private void GenerateResultDoc(IDocResult docResult,List<double> result, string filePath, int degree)
+    private void GenerateResultDoc(IDocResult docResult,List<double> result, string filePath, int degree, double eps, int iteration)
     {
-        docResult.DocResult(result, filePath, degree);
+        docResult.DocResult(result, filePath, degree, eps, iteration);
     }
 
     private void OnGridDataChange(object? sender, PolynomialInterpolation interpolation)

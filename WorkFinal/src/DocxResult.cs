@@ -15,7 +15,7 @@ public class DocxResult : IDocResult
     private readonly DataGrid _dataGrid = DataGrid.GetInstance();
 
 
-    public void DocResult(List<double> results, string outPath, int degree)
+    public void DocResult(List<double> results, string outPath, int degree, double eps, int iterations)
     {
         using (var fs = new FileStream(outPath, FileMode.Create, FileAccess.Write))
         {
@@ -25,8 +25,8 @@ public class DocxResult : IDocResult
             CreateDataPointsSection(doc);
             CreateGraphSection(doc);
             CreateDegreeSection(doc, degree);
-            CreateEpsilonSection(doc);
-            CreateMaxIterationsSection(doc);
+            CreateEpsilonSection(doc, eps);
+            CreateMaxIterationsSection(doc, iterations);
             CreateRootFindingResultsSection(doc, results);
 
             doc.Write(fs);
@@ -66,7 +66,7 @@ public class DocxResult : IDocResult
             graphParagraph.Alignment = ParagraphAlignment.LEFT;
 
             var graphRun = graphParagraph.CreateRun();
-            var picture = graphRun.AddPicture(imageStream, (int)PictureType.PNG, "Graph", Units.ToEMU(400),
+            graphRun.AddPicture(imageStream, (int)PictureType.PNG, "Graph", Units.ToEMU(400),
                 Units.ToEMU(300));
         }
     }
@@ -80,20 +80,20 @@ public class DocxResult : IDocResult
         paragraphRun1.SetText($"Degree used: {degree}");
     }
 
-    private void CreateEpsilonSection(XWPFDocument doc)
+    private void CreateEpsilonSection(XWPFDocument doc, double eps)
     {
         var paragraph = doc.CreateParagraph();
         paragraph.Alignment = ParagraphAlignment.LEFT;
         var paragraphRun = paragraph.CreateRun();
-        paragraphRun.SetText("Eps used: 1E-06");
+        paragraphRun.SetText($"Eps used: {eps}");
     }
 
-    private void CreateMaxIterationsSection(XWPFDocument doc)
+    private void CreateMaxIterationsSection(XWPFDocument doc, int iterations)
     {
         var xwpfParagraph = doc.CreateParagraph();
         xwpfParagraph.Alignment = ParagraphAlignment.LEFT;
         var xwpfParagraphRun = xwpfParagraph.CreateRun();
-        xwpfParagraphRun.SetText("Max Iterations: 100");
+        xwpfParagraphRun.SetText($"Max Iterations: {iterations}");
     }
 
     private void CreateRootFindingResultsSection(XWPFDocument doc, List<double> results)

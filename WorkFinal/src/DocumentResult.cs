@@ -16,19 +16,19 @@ public class DocumentResult : IDocResult
     private readonly DataGrid _dataGrid = DataGrid.GetInstance();
 
 
-    public void DocResult(List<double> result, string outPath, int degree)
+    public void DocResult(List<double> result, string outPath, int degree, double eps, int iterations)
     {
         using (var memoryStream = new MemoryStream())
         {
             using (var document = new Document())
             {
-                var writer = PdfWriter.GetInstance(document, memoryStream);
+                PdfWriter.GetInstance(document, memoryStream);
                 document.Open();
 
                 AddTitle(document);
                 AddDataPoints(document);
                 AddGraphImage(document);
-                AddParameters(document, degree);
+                AddParameters(document, degree, eps, iterations);
                 AddResultInfo(document, result);
 
                 document.Close();
@@ -67,15 +67,15 @@ public class DocumentResult : IDocResult
         document.Add(graphImage);
     }
 
-    private void AddParameters(Document document, int degree)
+    private void AddParameters(Document document, int degree, double eps, int iterations)
     {
         var parag = new Paragraph($"Degree used: {degree}");
         document.Add(parag);
 
-        var eParagraph = new Paragraph($"Epsilon used: {1e-6}");
+        var eParagraph = new Paragraph($"Epsilon used: {eps}");
         document.Add(eParagraph);
 
-        var paragraph = new Paragraph($"Max iterations: {100}");
+        var paragraph = new Paragraph($"Max iterations: {iterations}");
         document.Add(paragraph);
     }
 
