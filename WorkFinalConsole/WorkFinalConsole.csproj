@@ -9,13 +9,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Content Include="..\.dockerignore">
-        <Link>.dockerignore</Link>
-      </Content>
+        <Content Include="..\.dockerignore">
+            <Link>.dockerignore</Link>
+        </Content>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Polynomial\Polynomial.csproj" />
+        <ProjectReference Include="..\Polynomial\Polynomial.csproj"/>
     </ItemGroup>
 
 </Project>

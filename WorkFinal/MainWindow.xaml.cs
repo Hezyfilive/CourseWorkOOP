@@ -46,16 +46,7 @@ public partial class MainWindow
 
     private void CalculateResult_Click(object sender, RoutedEventArgs e)
     {
-        var degreeText = DegreeSelect.Text;
-        if (int.TryParse(degreeText, out var degree))
-        {
-            var result = GetResult(degree);
-            var graphWindow = new GraphWindow(result);
-        }
-        else
-        {
-            MessageBox.Show("Invalid double value entered.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-        }
+        GenerateResult(generateFile: false);
     }
 
 
@@ -79,50 +70,12 @@ public partial class MainWindow
 
     private void PdfResult_Click(object sender, RoutedEventArgs e)
     {
-        var saveFileDialog = new SaveFileDialog()
-        {
-            Filter = "PDF Files (*.pdf)|*.pdf|All Files (*.*)|*.*"
-        };
-        if (saveFileDialog.ShowDialog() == true)
-        {
-            var filePath = saveFileDialog.FileName;
-
-            var degreeText = DegreeSelect.Text;
-            if (int.TryParse(degreeText, out var degree))
-            {
-                var result = GetResult(degree);
-                var documentResult = new DocumentResult();
-                documentResult.DocResult(result, filePath, degree);
-            }
-            else
-            {
-                MessageBox.Show("Invalid double value entered.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
+        GenerateResult(pdfResult: true);
     }
 
     private void DocxResult_Click(object sender, RoutedEventArgs e)
     {
-        var saveFileDialog = new SaveFileDialog()
-        {
-            Filter = "Word Files (*.docx)|*.docx|All Files (*.*)|*.*"
-        };
-        if (saveFileDialog.ShowDialog() == true)
-        {
-            var filePath = saveFileDialog.FileName;
-
-            var degreeText = DegreeSelect.Text;
-            if (int.TryParse(degreeText, out var degree))
-            {
-                var result = GetResult(degree);
-                var docxResult = new DocxResult();
-                docxResult.DocResult(result, filePath, degree);
-            }
-            else
-            {
-                MessageBox.Show("Invalid double value entered.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
+        GenerateResult();
     }
 
     private void EditButton_Click(object sender, RoutedEventArgs e)
@@ -162,16 +115,70 @@ public partial class MainWindow
         }
     }
 
+    private void GenerateResult(bool pdfResult = false, bool generateFile = true)
+    {
+        var degreeText = DegreeSelect.Text;
+
+        if (int.TryParse(degreeText, out var degree))
+        {
+            double eps = TxtSearch.Visibility == Visibility.Visible && double.TryParse(TxtSearch.Text, out var parsedEps)
+                ? parsedEps
+                : 1e-6;
+
+            int iterations = IterationText.Visibility == Visibility.Visible && int.TryParse(IterationText.Text, out var parsedIterations)
+                ? parsedIterations
+                : 100;
+
+            List<double> result = GetResult(degree, eps, iterations);
+
+            if (generateFile)
+            {
+                var saveFileDialog = new SaveFileDialog()
+                {
+                    Filter = pdfResult
+                        ? "PDF Files (*.pdf)|*.pdf|All Files (*.*)|*.*"
+                        : "Word Files (*.docx)|*.docx|All Files (*.*)|*.*"
+                };
+                if (saveFileDialog.ShowDialog() == true)
+                {
+                    var filePath = saveFileDialog.FileName;
+
+                    if (pdfResult)
+                    {
+                        GenerateResultDoc(new DocumentResult(), result, filePath, degree);
+                    }
+                    else
+                    {
+                        GenerateResultDoc(new DocxResult(), result, filePath, degree);
+                    }
+                }
+            }
+            else
+            {
+                var graphWindow = new GraphWindow(result);
+            }
+        }
+        else
+        {
+            MessageBox.Show("Invalid double value entered.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
+
+
+    private void GenerateResultDoc(IDocResult docResult,List<double> result, string filePath, int degree)
+    {
+        docResult.DocResult(result, filePath, degree);
+    }
+
     private void OnGridDataChange(object? sender, PolynomialInterpolation interpolation)
     {
         var dataPoints = interpolation.DataPoints;
         ObservableCollection<DataPoint> collection = new(dataPoints);
         DataPointGrid.ItemsSource = collection;
     }
-
-    private List<double> GetResult(int degree)
+    private List<double> GetResult(int degree, double eps, int iterations)
     {
         var interpolation = _dataGrid.GetPolynomialInterpolation();
-        return interpolation.FindRoots(degree, 1e-6, 100);
+        return interpolation.FindRoots(degree, eps, iterations);
     }
 }
