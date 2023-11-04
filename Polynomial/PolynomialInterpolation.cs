@@ -3,7 +3,6 @@ using System.Xml.Serialization;
 
 namespace Polynom;
 
-
 [Serializable]
 public class PolynomialInterpolation
 {
@@ -18,6 +17,7 @@ public class PolynomialInterpolation
     {
         DataPoints = dataPoints;
     }
+
     public PolynomialInterpolation(DataPoint[] dataPoints)
     {
         DataPoints = dataPoints.ToList();
@@ -40,10 +40,10 @@ public class PolynomialInterpolation
 
     public double PolynomialF(double x, int degree)
     {
-        double a = 1.0;
-        double b = 2.0;
-        double c = 3.0;
-        double d = 4.0;
+        var a = 1.0;
+        var b = 2.0;
+        var c = 3.0;
+        var d = 4.0;
 
         switch (degree)
         {
@@ -57,47 +57,44 @@ public class PolynomialInterpolation
                 throw new ArgumentException("Invalid degree value");
         }
     }
+
     public double LagrangeInterpolation(double x)
     {
         double result = 0;
         foreach (var dataPoint in DataPoints)
         {
-            double term = dataPoint.Y;
+            var term = dataPoint.Y;
             foreach (var otherPoint in DataPoints)
-            {
                 if (otherPoint != dataPoint)
-                {
                     term *= (x - otherPoint.X) / (dataPoint.X - otherPoint.X);
-                }
-            }
             result += term;
         }
+
         return result;
     }
+
     public List<double> FindRoots(int degree, double epsilon, int maxIterations)
     {
         double x0 = 0;
         double x1 = 1;
-        List<double> roots = new List<double>();
-        int iteration = 0;
+        var roots = new List<double>();
+        var iteration = 0;
 
         while (iteration < maxIterations)
         {
-            double fValue0 = PolynomialF(x0, degree);
-            double fValue1 = PolynomialF(x1, degree);
-            double gValue0 = LagrangeInterpolation(x0);
-            double gValue1 = LagrangeInterpolation(x1);
+            var fValue0 = PolynomialF(x0, degree);
+            var fValue1 = PolynomialF(x1, degree);
+            var gValue0 = LagrangeInterpolation(x0);
+            var gValue1 = LagrangeInterpolation(x1);
 
-            double x2 = x1 - (fValue1 - gValue1) * (x1 - x0) / (fValue1 - fValue0);
+            var x2 = x1 - (fValue1 - gValue1) * (x1 - x0) / (fValue1 - fValue0);
 
-            double fValue2 = PolynomialF(x2, degree);
-            double gValue2 = LagrangeInterpolation(x2);
+            var fValue2 = PolynomialF(x2, degree);
+            var gValue2 = LagrangeInterpolation(x2);
 
             if (Math.Abs(fValue2 - gValue2) < epsilon)
-            {
                 // Root found, add to the list of roots
                 roots.Add(x2);
-            }
 
             x0 = x1;
             x1 = x2;
@@ -110,21 +107,21 @@ public class PolynomialInterpolation
 
     public void SaveToXml(string path)
     {
-        using (XmlTextWriter writer = new XmlTextWriter(path, null))
+        using (var writer = new XmlTextWriter(path, null))
         {
             writer.Formatting = Formatting.Indented;
-            
-            XmlSerializer serializer = new XmlSerializer(typeof(PolynomialInterpolation));
-            
+
+            var serializer = new XmlSerializer(typeof(PolynomialInterpolation));
+
             serializer.Serialize(writer, this);
         }
     }
 
     public static PolynomialInterpolation LoadFromXml(string path)
     {
-        using (StreamReader reader = new StreamReader(path))
+        using (var reader = new StreamReader(path))
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(PolynomialInterpolation));
+            var serializer = new XmlSerializer(typeof(PolynomialInterpolation));
             return (PolynomialInterpolation)serializer.Deserialize(reader);
         }
     }

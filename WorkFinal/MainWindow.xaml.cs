@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Windows;
 using Microsoft.Win32;
-using NPOI.SS.Formula.Functions;
 using Polynom;
 
 namespace WorkFinal;

@@ -23,6 +23,7 @@ public partial class GraphWindow : Window
 
         interpolationPlot.Model = plotModel;
     }
+
     public GraphWindow(List<double> roots)
     {
         InitializeComponent();
@@ -34,14 +35,11 @@ public partial class GraphWindow : Window
             MarkerSize = 3,
             MarkerFill = OxyColors.Red
         };
-        foreach (var root in roots)
-        {
-            rootSeries.Points.Add(new ScatterPoint(root, 0));
-        }
-        
+        foreach (var root in roots) rootSeries.Points.Add(new ScatterPoint(root, 0));
+
         plotModel.Series.Add(rootSeries);
         plotModel.Axes.Add(new LinearAxis { Position = AxisPosition.Bottom, Title = "X" });
-        
+
         interpolationPlot.Model = plotModel;
     }
 

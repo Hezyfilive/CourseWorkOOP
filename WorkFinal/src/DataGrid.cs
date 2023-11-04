@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows.Documents;
 using Polynom;
 
 namespace WorkFinal;
@@ -83,8 +82,6 @@ public class DataGrid
 
     public static DataGrid GetInstance()
     {
-        if (_instance == null) _instance = new DataGrid();
-
-        return _instance;
+        return _instance ??= new DataGrid();
     }
 }
