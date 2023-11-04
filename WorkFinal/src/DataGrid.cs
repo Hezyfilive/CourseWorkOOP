@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows;
 using Polynom;
 
 namespace WorkFinal;
@@ -32,6 +33,10 @@ public class DataGrid
         {
             _polynomialInterpolation.SaveToXml(path);
         }
+        catch
+        {
+            MessageBox.Show("Error saving data to xml.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
         finally
         {
             _polynomialInterpolation = new PolynomialInterpolation();
@@ -44,6 +49,10 @@ public class DataGrid
         try
         {
             _polynomialInterpolation = PolynomialInterpolation.LoadFromXml(path);
+        }
+        catch
+        {
+            MessageBox.Show("Error Loading data from xml.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
         finally
         {
