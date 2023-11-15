@@ -15,7 +15,7 @@ public class DocxResult : IDocResult
     private readonly DataGrid _dataGrid = DataGrid.GetInstance();
 
 
-    public void DocResult(List<double> results, string outPath, int degree, double eps, int iterations)
+    public void DocResult(List<double> results, string outPath, int degree, double eps, double minValue, double maxValue, double step)
     {
         using (var fs = new FileStream(outPath, FileMode.Create, FileAccess.Write))
         {
@@ -26,7 +26,7 @@ public class DocxResult : IDocResult
             CreateGraphSection(doc);
             CreateDegreeSection(doc, degree);
             CreateEpsilonSection(doc, eps);
-            CreateMaxIterationsSection(doc, iterations);
+            CreateMaxIterationsSection(doc, minValue, maxValue, step);
             CreateRootFindingResultsSection(doc, results);
 
             doc.Write(fs);
@@ -88,12 +88,12 @@ public class DocxResult : IDocResult
         paragraphRun.SetText($"Eps used: {eps}");
     }
 
-    private void CreateMaxIterationsSection(XWPFDocument doc, int iterations)
+    private void CreateMaxIterationsSection(XWPFDocument doc, double minValue, double maxValue, double step)
     {
         var xwpfParagraph = doc.CreateParagraph();
         xwpfParagraph.Alignment = ParagraphAlignment.LEFT;
         var xwpfParagraphRun = xwpfParagraph.CreateRun();
-        xwpfParagraphRun.SetText($"Max Iterations: {iterations}");
+        xwpfParagraphRun.SetText($" MinValue: {minValue}, MaxValue: {maxValue}, Step: {step}");
     }
 
     private void CreateRootFindingResultsSection(XWPFDocument doc, List<double> results)

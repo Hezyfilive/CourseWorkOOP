@@ -16,7 +16,7 @@ public class DocumentResult : IDocResult
     private readonly DataGrid _dataGrid = DataGrid.GetInstance();
 
 
-    public void DocResult(List<double> result, string outPath, int degree, double eps, int iterations)
+    public void DocResult(List<double> results, string outPath, int degree, double eps, double minValue, double maxValue, double step)
     {
         using (var memoryStream = new MemoryStream())
         {
@@ -28,8 +28,8 @@ public class DocumentResult : IDocResult
                 AddTitle(document);
                 AddDataPoints(document);
                 AddGraphImage(document);
-                AddParameters(document, degree, eps, iterations);
-                AddResultInfo(document, result);
+                AddParameters(document, degree, eps, minValue, maxValue, step);
+                AddResultInfo(document, results);
 
                 document.Close();
             }
@@ -67,16 +67,16 @@ public class DocumentResult : IDocResult
         document.Add(graphImage);
     }
 
-    private void AddParameters(Document document, int degree, double eps, int iterations)
+    private void AddParameters(Document document, int degree, double eps, double minValue, double maxValue, double step)
     {
-        var parag = new Paragraph($"Degree used: {degree}");
-        document.Add(parag);
+        var degreeParagraph  = new Paragraph($"Degree used: {degree}");
+        document.Add(degreeParagraph );
 
-        var eParagraph = new Paragraph($"Epsilon used: {eps}");
-        document.Add(eParagraph);
+        var epsParagraph  = new Paragraph($"Epsilon used: {eps}");
+        document.Add(epsParagraph );
 
-        var paragraph = new Paragraph($"Max iterations: {iterations}");
-        document.Add(paragraph);
+        var iterationsParagraph = new Paragraph($"MinValue: {minValue}, MaxValue: {maxValue}, Step: {step}");
+        document.Add(iterationsParagraph);
     }
 
     private void AddResultInfo(Document document, List<double> result)

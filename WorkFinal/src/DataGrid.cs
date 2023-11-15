@@ -11,6 +11,7 @@ public class DataGrid
     private PolynomialInterpolation _polynomialInterpolation;
 
     public event EventHandler<PolynomialInterpolation>? GridEvent;
+    public event EventHandler<InterpolationSettings>? SettingsEvent;
 
     public DataGrid()
     {
@@ -57,6 +58,7 @@ public class DataGrid
         finally
         {
             GridEvent?.Invoke(this, _polynomialInterpolation);
+            SettingsEvent?.Invoke(this, _polynomialInterpolation.Settings);
         }
     }
 

@@ -1,5 +1,7 @@
 ﻿using Polynom;
 
+namespace WorkFinalConsole;
+
 internal abstract class Program
 {
     private static void Main()
@@ -39,10 +41,24 @@ internal abstract class Program
         Console.WriteLine("Enter the eps:");
         var eps = double.Parse(Console.ReadLine());
 
-        Console.WriteLine("Enter max iteration value:");
-        var maxIteration = int.Parse(Console.ReadLine());
-
-        var results = polynomialInterpolation.FindRoots(degree, eps, maxIteration);
+        Console.WriteLine("Enter min value:");
+        var minValue = int.Parse(Console.ReadLine());   
+        
+        Console.WriteLine("Enter max value:");
+        var maxValue = int.Parse(Console.ReadLine());  
+        
+        Console.WriteLine("Enter step value:");
+        var step = int.Parse(Console.ReadLine());
+        
+        var setting = new InterpolationSettings
+        {
+            Degree = degree,
+            Epsilon = eps,
+            MinValue = minValue,
+            MaxValue = maxValue,
+            Step = step
+        };
+        var results = polynomialInterpolation.FindRoots(setting);
         foreach (var result in results) Console.WriteLine($"Root found within x: {result}");
     }
 }

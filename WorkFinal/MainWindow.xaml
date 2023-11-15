@@ -153,7 +153,9 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
+                
                 <Button Grid.Row="2" Style="{StaticResource AddButton}" Click="ShowChart_Click"
                         HorizontalAlignment="Center">
                     <StackPanel Orientation="Horizontal">
@@ -169,22 +171,36 @@
                                Visibility="{Binding ElementName=DegreeSelect, Path=Text.IsEmpty, Converter={StaticResource  BoolToVis}}" />
                     <TextBox x:Name="DegreeSelect" Style="{StaticResource TextBoxSearch}" />
                 </Grid>
-                <Grid Row="4" Visibility="Hidden">
+                <Grid Row="4">
                     <TextBlock Margin="10 0" Width="250" VerticalAlignment="Center" HorizontalAlignment="Left"
                                Foreground="#b0b9c6" IsHitTestVisible="False"
                                Panel.ZIndex="1" Text="Enter eps here ..."
                                Visibility="{Binding ElementName=TxtSearch, Path=Text.IsEmpty, Converter={StaticResource  BoolToVis}}" />
                     <TextBox x:Name="TxtSearch" Style="{StaticResource TextBoxSearch}" />
                 </Grid>
-                <Grid Row="5" Visibility="Hidden">
+                <Grid Row="5">
                     <TextBlock Margin="10 0" Width="250" VerticalAlignment="Center" HorizontalAlignment="Left"
                                Foreground="#b0b9c6" IsHitTestVisible="False"
-                               Panel.ZIndex="1" Text="Enter iterations here ..."
-                               Visibility="{Binding ElementName=IterationText, Path=Text.IsEmpty, Converter={StaticResource  BoolToVis}}" />
-                    <TextBox x:Name="IterationText" Style="{StaticResource TextBoxSearch}" />
+                               Panel.ZIndex="1" Text="Enter minimal value ..."
+                               Visibility="{Binding ElementName=MinValueText, Path=Text.IsEmpty, Converter={StaticResource  BoolToVis}}" />
+                    <TextBox x:Name="MinValueText" Style="{StaticResource TextBoxSearch}" />
+                </Grid>     
+                <Grid Row="6">
+                    <TextBlock Margin="10 0" Width="250" VerticalAlignment="Center" HorizontalAlignment="Left"
+                               Foreground="#b0b9c6" IsHitTestVisible="False"
+                               Panel.ZIndex="1" Text="Enter maximal value ..."
+                               Visibility="{Binding ElementName=MaxValueText, Path=Text.IsEmpty, Converter={StaticResource  BoolToVis}}" />
+                    <TextBox x:Name="MaxValueText" Style="{StaticResource TextBoxSearch}" />
+                </Grid>   
+                <Grid Row="7">
+                    <TextBlock Margin="10 0" Width="250" VerticalAlignment="Center" HorizontalAlignment="Left"
+                               Foreground="#b0b9c6" IsHitTestVisible="False"
+                               Panel.ZIndex="1" Text="Enter step value ..."
+                               Visibility="{Binding ElementName=StepText, Path=Text.IsEmpty, Converter={StaticResource  BoolToVis}}" />
+                    <TextBox x:Name="StepText" Style="{StaticResource TextBoxSearch}" />
                 </Grid>
 
-                <Button Grid.Row="6" Style="{StaticResource AddButton}" HorizontalAlignment="Center"
+                <Button Grid.Row="8" Style="{StaticResource AddButton}" HorizontalAlignment="Center"
                         Click="CalculateResult_Click">
                     <StackPanel Orientation="Horizontal">
                         <icon:PackIconMaterial Kind="CalculatorVariant" VerticalAlignment="Center" Width="11"

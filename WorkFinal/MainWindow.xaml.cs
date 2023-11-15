@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Windows;
 using Microsoft.Win32;
 using Polynom;
@@ -18,6 +19,7 @@ public partial class MainWindow
     {
         InitializeComponent();
         _dataGrid.GridEvent += OnGridDataChange;
+        _dataGrid.SettingsEvent += OnSettingsLoad;
     }
 
     private void Logout_Click(object sender, RoutedEventArgs e)
@@ -119,43 +121,49 @@ public partial class MainWindow
     {
         var degreeText = DegreeSelect.Text;
 
-        if (int.TryParse(degreeText, out var degree))
+        if (int.TryParse(degreeText, out var degree) &&
+            double.TryParse(TxtSearch.Text, out var parsedEps) &&
+            double.TryParse(MinValueText.Text, out var parsedMinValue) &&
+            double.TryParse(MaxValueText.Text, out var parsedMaxValue) &&
+            double.TryParse(StepText.Text, out var parsedStep))
         {
-            double eps = TxtSearch.Visibility == Visibility.Visible && double.TryParse(TxtSearch.Text, out var parsedEps)
-                ? parsedEps
-                : 1e-6;
-
-            int iterations = IterationText.Visibility == Visibility.Visible && int.TryParse(IterationText.Text, out var parsedIterations)
-                ? parsedIterations
-                : 100;
-
-            List<double> result = GetResult(degree, eps, iterations);
-
-            if (generateFile)
+            List<double> result = new List<double>();
+            try
             {
-                var saveFileDialog = new SaveFileDialog()
+                result = GetResult(degree, parsedEps, parsedMinValue, parsedMaxValue, parsedStep);
+            }
+            catch (ArgumentException ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                if (generateFile)
                 {
-                    Filter = pdfResult
-                        ? "PDF Files (*.pdf)|*.pdf|All Files (*.*)|*.*"
-                        : "Word Files (*.docx)|*.docx|All Files (*.*)|*.*"
-                };
-                if (saveFileDialog.ShowDialog() == true)
-                {
-                    var filePath = saveFileDialog.FileName;
+                    var saveFileDialog = new SaveFileDialog()
+                    {
+                        Filter = pdfResult
+                            ? "PDF Files (*.pdf)|*.pdf|All Files (*.*)|*.*"
+                            : "Word Files (*.docx)|*.docx|All Files (*.*)|*.*"
+                    };
+                    if (saveFileDialog.ShowDialog() == true)
+                    {
+                        var filePath = saveFileDialog.FileName;
 
-                    if (pdfResult)
-                    {
-                        GenerateResultDoc(new DocumentResult(), result, filePath, degree, eps, iterations);
-                    }
-                    else
-                    {
-                        GenerateResultDoc(new DocxResult(), result, filePath, degree, eps, iterations);
+                        if (pdfResult)
+                        {
+                            GenerateResultDoc(new DocumentResult(), result, filePath, degree, parsedEps, parsedMinValue, parsedMaxValue, parsedStep);
+                        }
+                        else
+                        {
+                            GenerateResultDoc(new DocxResult(), result, filePath, degree, parsedEps, parsedMinValue, parsedMaxValue, parsedStep);
+                        }
                     }
                 }
-            }
-            else
-            {
-                var graphWindow = new GraphWindow(result);
+                else
+                {
+                    var graphWindow = new GraphWindow(result);
+                }
             }
         }
         else
@@ -165,9 +173,9 @@ public partial class MainWindow
     }
 
 
-    private void GenerateResultDoc(IDocResult docResult,List<double> result, string filePath, int degree, double eps, int iteration)
+    private void GenerateResultDoc(IDocResult docResult,List<double> result, string filePath, int degree, double eps, double minValue, double maxValue, double step)
     {
-        docResult.DocResult(result, filePath, degree, eps, iteration);
+        docResult.DocResult(result, filePath, degree, eps, minValue, maxValue, step);
     }
 
     private void OnGridDataChange(object? sender, PolynomialInterpolation interpolation)
@@ -176,9 +184,29 @@ public partial class MainWindow
         ObservableCollection<DataPoint> collection = new(dataPoints);
         DataPointGrid.ItemsSource = collection;
     }
-    private List<double> GetResult(int degree, double eps, int iterations)
-    {
+    private List<double> GetResult(int degree, double eps, double minValue, double maxValue, double step)
+    { 
         var interpolation = _dataGrid.GetPolynomialInterpolation();
-        return interpolation.FindRoots(degree, eps, iterations);
+        
+        var setting = new InterpolationSettings
+        {
+            Degree = degree,
+            Epsilon = eps,
+            MinValue = minValue,
+            MaxValue = maxValue,
+            Step = step
+        };
+        
+        return interpolation.FindRoots(setting);
+    }
+
+    private void OnSettingsLoad(object? sender, InterpolationSettings settings)
+    {
+        DegreeSelect.Text = settings.Degree.ToString();
+        Console.WriteLine(DegreeSelect.Text);
+        TxtSearch.Text = settings.Epsilon.ToString(CultureInfo.CurrentCulture);
+        MinValueText.Text = settings.MinValue.ToString(CultureInfo.CurrentCulture);
+        MaxValueText.Text = settings.MaxValue.ToString(CultureInfo.CurrentCulture);
+        StepText.Text = settings.Step.ToString(CultureInfo.CurrentCulture);
     }
 }
