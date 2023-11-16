@@ -155,7 +155,7 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                
+
                 <Button Grid.Row="2" Style="{StaticResource AddButton}" Click="ShowChart_Click"
                         HorizontalAlignment="Center">
                     <StackPanel Orientation="Horizontal">
@@ -184,14 +184,14 @@
                                Panel.ZIndex="1" Text="Enter minimal value ..."
                                Visibility="{Binding ElementName=MinValueText, Path=Text.IsEmpty, Converter={StaticResource  BoolToVis}}" />
                     <TextBox x:Name="MinValueText" Style="{StaticResource TextBoxSearch}" />
-                </Grid>     
+                </Grid>
                 <Grid Row="6">
                     <TextBlock Margin="10 0" Width="250" VerticalAlignment="Center" HorizontalAlignment="Left"
                                Foreground="#b0b9c6" IsHitTestVisible="False"
                                Panel.ZIndex="1" Text="Enter maximal value ..."
                                Visibility="{Binding ElementName=MaxValueText, Path=Text.IsEmpty, Converter={StaticResource  BoolToVis}}" />
                     <TextBox x:Name="MaxValueText" Style="{StaticResource TextBoxSearch}" />
-                </Grid>   
+                </Grid>
                 <Grid Row="7">
                     <TextBlock Margin="10 0" Width="250" VerticalAlignment="Center" HorizontalAlignment="Left"
                                Foreground="#b0b9c6" IsHitTestVisible="False"

@@ -72,7 +72,7 @@ public partial class MainWindow
 
     private void PdfResult_Click(object sender, RoutedEventArgs e)
     {
-        GenerateResult(pdfResult: true);
+        GenerateResult(true);
     }
 
     private void DocxResult_Click(object sender, RoutedEventArgs e)
@@ -119,63 +119,73 @@ public partial class MainWindow
 
     private void GenerateResult(bool pdfResult = false, bool generateFile = true)
     {
-        var degreeText = DegreeSelect.Text;
-
-        if (int.TryParse(degreeText, out var degree) &&
-            double.TryParse(TxtSearch.Text, out var parsedEps) &&
-            double.TryParse(MinValueText.Text, out var parsedMinValue) &&
-            double.TryParse(MaxValueText.Text, out var parsedMaxValue) &&
-            double.TryParse(StepText.Text, out var parsedStep))
+        InterpolationSettings settings;
+        try
         {
-            List<double> result = new List<double>();
-            try
+            settings = new InterpolationSettings
             {
-                result = GetResult(degree, parsedEps, parsedMinValue, parsedMaxValue, parsedStep);
-            }
-            catch (ArgumentException ex)
-            {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            finally
-            {
-                if (generateFile)
-                {
-                    var saveFileDialog = new SaveFileDialog()
-                    {
-                        Filter = pdfResult
-                            ? "PDF Files (*.pdf)|*.pdf|All Files (*.*)|*.*"
-                            : "Word Files (*.docx)|*.docx|All Files (*.*)|*.*"
-                    };
-                    if (saveFileDialog.ShowDialog() == true)
-                    {
-                        var filePath = saveFileDialog.FileName;
-
-                        if (pdfResult)
-                        {
-                            GenerateResultDoc(new DocumentResult(), result, filePath, degree, parsedEps, parsedMinValue, parsedMaxValue, parsedStep);
-                        }
-                        else
-                        {
-                            GenerateResultDoc(new DocxResult(), result, filePath, degree, parsedEps, parsedMinValue, parsedMaxValue, parsedStep);
-                        }
-                    }
-                }
-                else
-                {
-                    var graphWindow = new GraphWindow(result);
-                }
-            }
+                Degree = int.Parse(DegreeSelect.Text),
+                Epsilon = double.Parse(TxtSearch.Text),
+                MinValue = double.Parse(MinValueText.Text),
+                MaxValue = double.Parse(MaxValueText.Text),
+                Step = double.Parse(StepText.Text)
+            };
         }
-        else
+
+        catch (FormatException)
         {
-            MessageBox.Show("Invalid double value entered.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show("Invalid value entered.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            return;
+        }
+
+        catch (OverflowException)
+        {
+            MessageBox.Show("Value is too large.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            return;
+        }
+
+        var result = new List<double>();
+        try
+        {
+            result = GetResult(settings);
+        }
+        catch (ArgumentException ex)
+        {
+            MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        finally
+        {
+            if (generateFile)
+            {
+                var saveFileDialog = new SaveFileDialog()
+                {
+                    Filter = pdfResult
+                        ? "PDF Files (*.pdf)|*.pdf|All Files (*.*)|*.*"
+                        : "Word Files (*.docx)|*.docx|All Files (*.*)|*.*"
+                };
+                if (saveFileDialog.ShowDialog() == true)
+                {
+                    var filePath = saveFileDialog.FileName;
+
+                    if (pdfResult)
+                        GenerateResultDoc(new DocumentResult(), result, filePath, settings);
+                    else
+                        GenerateResultDoc(new DocxResult(), result, filePath, settings);
+                }
+            }
+            else
+            {
+                var graphWindow = new GraphWindow(result);
+            }
         }
     }
 
 
-    private void GenerateResultDoc(IDocResult docResult,List<double> result, string filePath, int degree, double eps, double minValue, double maxValue, double step)
+    private void GenerateResultDoc(IDocResult docResult, List<double> result, string filePath,
+        InterpolationSettings settings)
     {
-        docResult.DocResult(result, filePath, degree, eps, minValue, maxValue, step);
+        docResult.DocResult(result, filePath, settings.Degree, settings.Epsilon, settings.MinValue, settings.MaxValue,
+            settings.Step);
     }
 
     private void OnGridDataChange(object? sender, PolynomialInterpolation interpolation)
@@ -184,26 +194,16 @@ public partial class MainWindow
         ObservableCollection<DataPoint> collection = new(dataPoints);
         DataPointGrid.ItemsSource = collection;
     }
-    private List<double> GetResult(int degree, double eps, double minValue, double maxValue, double step)
-    { 
+
+    private List<double> GetResult(InterpolationSettings settings)
+    {
         var interpolation = _dataGrid.GetPolynomialInterpolation();
-        
-        var setting = new InterpolationSettings
-        {
-            Degree = degree,
-            Epsilon = eps,
-            MinValue = minValue,
-            MaxValue = maxValue,
-            Step = step
-        };
-        
-        return interpolation.FindRoots(setting);
+        return interpolation.FindRoots(settings);
     }
 
     private void OnSettingsLoad(object? sender, InterpolationSettings settings)
     {
         DegreeSelect.Text = settings.Degree.ToString();
-        Console.WriteLine(DegreeSelect.Text);
         TxtSearch.Text = settings.Epsilon.ToString(CultureInfo.CurrentCulture);
         MinValueText.Text = settings.MinValue.ToString(CultureInfo.CurrentCulture);
         MaxValueText.Text = settings.MaxValue.ToString(CultureInfo.CurrentCulture);

@@ -10,10 +10,12 @@ public class PolynomialInterpolation
     public List<DataPoint> DataPoints { get; set; }
     public InterpolationSettings Settings { get; set; } = new();
     public List<double> Roots { get; set; } = new();
+
     public PolynomialInterpolation()
     {
         DataPoints = new List<DataPoint>();
     }
+
     public PolynomialInterpolation(List<DataPoint> dataPoints, InterpolationSettings settings)
     {
         DataPoints = dataPoints;
@@ -47,15 +49,12 @@ public class PolynomialInterpolation
 
     public double PolynomialF(double x, int degree)
     {
-        if (degree < 0)
-        {
-            throw new ArgumentException("Degree must be non-negative");
-        }
+        if (degree < 0) throw new ArgumentException("Degree must be non-negative");
 
         double result = 0;
         double term = 1;
 
-        for (int i = 0; i <= degree; i++)
+        for (var i = 0; i <= degree; i++)
         {
             result += term;
             term *= x / (i + 1) * (degree - i);
@@ -78,36 +77,35 @@ public class PolynomialInterpolation
 
         return result;
     }
+
     public List<double> FindRoots(InterpolationSettings settings)
     {
-        if (!Settings.Equals(settings))
+        if (Settings.Equals(settings)) return Roots;
+        Settings = settings;
+
+        var x0 = settings.MinValue;
+        var x1 = x0 + settings.Step;
+
+        Roots.Clear();
+
+        while (x1 <= settings.MaxValue)
         {
-            Settings = settings;
-            
-            double x0 = settings.MinValue;
-            double x1 = x0 + settings.Step;
-            
-            Roots.Clear();
+            var fValue0 = PolynomialF(x0, settings.Degree);
+            var fValue1 = PolynomialF(x1, settings.Degree);
+            var gValue1 = LagrangeInterpolation(x1);
 
-            while (x1 <= settings.MaxValue) 
-            {
-                var fValue0 = PolynomialF(x0, settings.Degree);
-                var fValue1 = PolynomialF(x1, settings.Degree);
-                var gValue1 = LagrangeInterpolation(x1);
+            var x2 = x1 - (fValue1 - gValue1) * (x1 - x0) / (fValue1 - fValue0);
 
-                var x2 = x1 - (fValue1 - gValue1) * (x1 - x0) / (fValue1 - fValue0);
+            var fValue2 = PolynomialF(x2, settings.Degree);
+            var gValue2 = LagrangeInterpolation(x2);
 
-                var fValue2 = PolynomialF(x2, settings.Degree);
-                var gValue2 = LagrangeInterpolation(x2);
+            if (Math.Abs(fValue2 - gValue2) < settings.Epsilon)
+                Roots.Add(x2);
 
-                if (Math.Abs(fValue2 - gValue2) < settings.Epsilon)
-                    Roots.Add(x2);
-
-                x0 = x1;
-                x1 += settings.Step;
-            }
+            x0 = x1;
+            x1 += settings.Step;
         }
-        
+
         return Roots;
     }
 

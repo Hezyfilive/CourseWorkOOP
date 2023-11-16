@@ -42,14 +42,14 @@ internal abstract class Program
         var eps = double.Parse(Console.ReadLine());
 
         Console.WriteLine("Enter min value:");
-        var minValue = int.Parse(Console.ReadLine());   
-        
+        var minValue = int.Parse(Console.ReadLine());
+
         Console.WriteLine("Enter max value:");
-        var maxValue = int.Parse(Console.ReadLine());  
-        
+        var maxValue = int.Parse(Console.ReadLine());
+
         Console.WriteLine("Enter step value:");
         var step = int.Parse(Console.ReadLine());
-        
+
         var setting = new InterpolationSettings
         {
             Degree = degree,

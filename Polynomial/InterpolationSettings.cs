@@ -8,15 +8,12 @@ public class InterpolationSettings
     public double MinValue { get; set; }
     public double MaxValue { get; set; }
     public double Step { get; set; }
-    
+
     public override bool Equals(object obj)
     {
-        if (obj == null || GetType() != obj.GetType())
-        {
-            return false;
-        }
+        if (obj == null || GetType() != obj.GetType()) return false;
 
-        InterpolationSettings otherSettings = (InterpolationSettings)obj;
+        var otherSettings = (InterpolationSettings)obj;
 
         return Degree == otherSettings.Degree &&
                Math.Abs(Epsilon - otherSettings.Epsilon) < double.Epsilon &&

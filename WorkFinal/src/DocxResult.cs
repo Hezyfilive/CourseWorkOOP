@@ -15,7 +15,8 @@ public class DocxResult : IDocResult
     private readonly DataGrid _dataGrid = DataGrid.GetInstance();
 
 
-    public void DocResult(List<double> results, string outPath, int degree, double eps, double minValue, double maxValue, double step)
+    public void DocResult(List<double> results, string outPath, int degree, double eps, double minValue,
+        double maxValue, double step)
     {
         using (var fs = new FileStream(outPath, FileMode.Create, FileAccess.Write))
         {

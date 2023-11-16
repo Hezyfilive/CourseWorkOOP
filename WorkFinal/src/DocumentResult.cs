@@ -16,7 +16,8 @@ public class DocumentResult : IDocResult
     private readonly DataGrid _dataGrid = DataGrid.GetInstance();
 
 
-    public void DocResult(List<double> results, string outPath, int degree, double eps, double minValue, double maxValue, double step)
+    public void DocResult(List<double> results, string outPath, int degree, double eps, double minValue,
+        double maxValue, double step)
     {
         using (var memoryStream = new MemoryStream())
         {
@@ -69,11 +70,11 @@ public class DocumentResult : IDocResult
 
     private void AddParameters(Document document, int degree, double eps, double minValue, double maxValue, double step)
     {
-        var degreeParagraph  = new Paragraph($"Degree used: {degree}");
-        document.Add(degreeParagraph );
+        var degreeParagraph = new Paragraph($"Degree used: {degree}");
+        document.Add(degreeParagraph);
 
-        var epsParagraph  = new Paragraph($"Epsilon used: {eps}");
-        document.Add(epsParagraph );
+        var epsParagraph = new Paragraph($"Epsilon used: {eps}");
+        document.Add(epsParagraph);
 
         var iterationsParagraph = new Paragraph($"MinValue: {minValue}, MaxValue: {maxValue}, Step: {step}");
         document.Add(iterationsParagraph);
